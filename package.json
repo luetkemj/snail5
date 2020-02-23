@@ -8,7 +8,7 @@
     "pretest": "cp config/.babelrc .babelrc",
     "test": "jest",
     "posttest": "rm -rf .babelrc",
-    "test:w": "cp config/.babelrc jest --watch",
+    "test:w": "cp config/.babelrc .babelrc && jest --watch",
     "predeploy": "rm -rf dist && npm run clearcache && npm run build && npm run test",
     "deploy": "gh-pages -d dist/default",
     "clearcache": "rm -rf .parcel-cache"
