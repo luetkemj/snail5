@@ -1,0 +1,38 @@
+{
+  "name": "snail5",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "pretest": "cp config/.babelrc .babelrc",
+    "test": "jest",
+    "posttest": "rm -rf .babelrc",
+    "test:w": "cp config/.babelrc jest --watch",
+    "predeploy": "rm -rf dist && npm run clearcache && npm run build && npm run test",
+    "deploy": "gh-pages -d dist/default",
+    "clearcache": "rm -rf .parcel-cache"
+  },
+  "targets": {
+    "default": {
+      "publicUrl": "/snail5/"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "4.17.15",
+    "scribe-rpg-coin-purse": "1.2.4",
+    "wrap-ansi": "6.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.8.3",
+    "@babel/preset-env": "7.8.3",
+    "babel-plugin-transform-default-import": "1.0.0",
+    "cssnano": "4.1.10",
+    "gh-pages": "2.1.1",
+    "jest": "24.9.0",
+    "parcel": "2.0.0-alpha.3.2",
+    "prettier": "1.19.1"
+  }
+}
