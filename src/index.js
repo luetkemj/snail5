@@ -1,3 +1,4 @@
+import { each, every } from "lodash";
 import ECS from "./ECS";
 import initGame from "./initializers/game.init";
 
@@ -6,10 +7,31 @@ document.addEventListener("keydown", ev => console.log(ev.key));
 initGame();
 
 function gameTick() {
+  // this name is terrible!!!
+  const sortedEntities = {};
+
+  each(ECS.entities, entity => {
+    // test each entity against each system for reqs (required components)
+    each(ECS.systems, system => {
+      if (every(system.reqs, req => entity[req])) {
+        sortedEntities[system.name] = sortedEntities[system.name] || [];
+        sortedEntities[system.name].push(entity.id);
+      }
+    });
+  });
+
   if (!ECS.game.paused) {
-    for (let i = 0; i < ECS.systems.length; i++) {
-      ECS.systems[i](ECS.entities);
-    }
+    // each(sortedEntities, (eids, systemName) => {
+    //   ECS.systems
+    // });
+
+    ECS.systems.forEach(system => {
+      system(sortedEntities[system.name]);
+    });
+
+    // for (let i = 0; i < ECS.systems.length; i++) {
+    //   ECS.systems[i](ECS.entities);
+    // }
   } else {
     renderSystem(ECS.entities);
   }

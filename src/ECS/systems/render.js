@@ -1,35 +1,15 @@
 import ECS from "..";
-import { readCacheKey } from "../cache";
 import { groupBy } from "lodash";
 import { clearCanvas, drawCell } from "../../lib/canvas";
-import { colors } from "../../lib/graphics";
-import { rectangle } from "../../lib/grid";
 
-const buildCharEntity = ({
-  char,
-  color = colors.hudText,
-  background = colors.defaultBGColor,
-  x,
-  y
-}) => ({
-  components: {
-    appearance: {
-      char,
-      color,
-      background
-    },
-    position: {
-      x,
-      y
-    }
-  }
-});
+export const name = "render";
+export const reqs = ["appearance", "position"];
 
-function render() {
+export default function render(eIds) {
   clearCanvas();
 
   // render map
-  const entities = readCacheKey("entityIds").reduce((acc, val) => {
+  const entities = eIds.reduce((acc, val) => {
     acc[val] = ECS.entities[val];
     return acc;
   }, {});
@@ -46,5 +26,3 @@ function render() {
     });
   });
 }
-
-export default render;
