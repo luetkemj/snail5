@@ -4,8 +4,7 @@ import { clearCanvas, drawCell } from "../../lib/canvas";
 
 export const name = "render";
 export const reqs = ["appearance", "position"];
-
-export default function render(eIds) {
+export const render = eIds => {
   clearCanvas();
 
   // render map
@@ -25,4 +24,4 @@ export default function render(eIds) {
       }
     });
   });
-}
+};

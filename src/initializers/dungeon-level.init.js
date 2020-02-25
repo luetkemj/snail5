@@ -21,8 +21,6 @@ const initDungeonLevel = () => {
     maxRoomSize: 12
   });
 
-  console.log(dungeon);
-
   Object.keys(dungeon.tiles).forEach(tileId => {
     const entity = Entity();
     const currTile = dungeon.tiles[tileId];
@@ -52,6 +50,8 @@ const initDungeonLevel = () => {
       setCacheId(entity.id, "openTiles");
     }
   });
+
+  return dungeon;
 };
 
 export default initDungeonLevel;

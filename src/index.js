@@ -1,37 +1,32 @@
 import { each, every } from "lodash";
 import ECS from "./ECS";
 import initGame from "./initializers/game.init";
+import processUserInput from "./lib/process-user-input";
+import userInput from "./lib/key-bindings";
 
-document.addEventListener("keydown", ev => console.log(ev.key));
+document.addEventListener("keydown", ev => userInput(ev.key));
 
 initGame();
 
 function gameTick() {
-  // this name is terrible!!!
-  const sortedEntities = {};
+  const sysManager = {};
 
   each(ECS.entities, entity => {
     // test each entity against each system for reqs (required components)
     each(ECS.systems, system => {
-      if (every(system.reqs, req => entity[req])) {
-        sortedEntities[system.name] = sortedEntities[system.name] || [];
-        sortedEntities[system.name].push(entity.id);
+      if (every(system.reqs, req => entity.components[req])) {
+        sysManager[system.name] = sysManager[system.name] || [];
+        sysManager[system.name].push(entity.id);
       }
     });
   });
 
   if (!ECS.game.paused) {
-    // each(sortedEntities, (eids, systemName) => {
-    //   ECS.systems
-    // });
-
     ECS.systems.forEach(system => {
-      system(sortedEntities[system.name]);
+      if (sysManager[system.name]) {
+        system[system.name](sysManager[system.name]);
+      }
     });
-
-    // for (let i = 0; i < ECS.systems.length; i++) {
-    //   ECS.systems[i](ECS.entities);
-    // }
   } else {
     renderSystem(ECS.entities);
   }
@@ -41,18 +36,19 @@ function gameTick() {
 gameTick();
 
 function update() {
-  if (ECS.game.userInput && ECS.game.playerTurn) {
+  // if (ECS.game.userInput && ECS.game.playerTurn) {
+  if (ECS.game.userInput) {
     processUserInput();
     gameTick();
     ECS.game.userInput = null;
     ECS.game.turn = ECS.game.turn += 1;
-    ECS.game.playerTurn = false;
+    // ECS.game.playerTurn = false;
   }
 
-  if (!ECS.game.playerTurn) {
-    gameTick();
-    ECS.game.playerTurn = true;
-  }
+  // if (!ECS.game.playerTurn) {
+  //   gameTick();
+  //   ECS.game.playerTurn = true;
+  // }
 }
 
 function gameLoop() {

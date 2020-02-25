@@ -1,16 +1,20 @@
 import appearance from "./components/appearance";
+import moveTo from "./components/move-to";
 import position from "./components/position";
 
-import renderSystem from "./systems/render";
+import * as renderSystem from "./systems/render";
+import * as movementSystem from "./systems/movement";
 
 export const ECS = {
   entities: {},
   components: {
     appearance,
+    moveTo,
     position
   },
-  systems: [renderSystem],
+  systems: [movementSystem, renderSystem],
   game: {
+    playerId: null,
     paused: false,
     turn: 0,
     userInput: null,
@@ -18,7 +22,6 @@ export const ECS = {
     grid: {
       width: 100,
       height: 34,
-
       map: {
         width: 79,
         height: 29,
