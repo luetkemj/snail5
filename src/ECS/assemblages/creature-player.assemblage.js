@@ -1,4 +1,3 @@
-import { setCacheEntityAtLocation, setPlayerCacheId } from "../cache";
 import createCreature from "./creature.assemblage";
 import { chars, colors } from "../../lib/graphics";
 

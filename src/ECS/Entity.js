@@ -1,9 +1,6 @@
 import ECS from ".";
-import uniq from "lodash";
-import { setCacheId } from "./cache";
 
-// caches is an array of cache keys to store this entity.id in
-const Entity = (cacheKeys = []) => {
+const Entity = () => {
   const id =
     (+new Date()).toString(16) + ((Math.random() * 100000000) | 0).toString(16);
 
@@ -21,10 +18,6 @@ const Entity = (cacheKeys = []) => {
   const print = function print() {
     console.log(JSON.parse(JSON.stringify(this, null, 2)));
   };
-
-  // set caches
-  const cacheKeysSet = uniq([...cacheKeys, "entityIds"]);
-  [...cacheKeysSet].forEach(cacheKey => setCacheId(id, cacheKey));
 
   const entity = {
     id,
