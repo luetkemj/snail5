@@ -1,6 +1,6 @@
 import ECS from "../ECS";
 
-export default function input(key) {
+const input = key => {
   switch (key) {
     case "ArrowUp":
       ECS.game.userInput = { key, type: "MOVE", payload: { x: 0, y: -1 } };
@@ -19,4 +19,6 @@ export default function input(key) {
       break;
     }
   }
-}
+};
+
+export default input;

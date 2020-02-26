@@ -59,3 +59,7 @@ function gameLoop() {
 }
 
 requestAnimationFrame(gameLoop);
+
+// exporting this object seems to make parcel work properly.
+// hopefully when parcel2 gets out of alpha we will know why...
+export default {};

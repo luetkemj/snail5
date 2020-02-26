@@ -5,7 +5,7 @@ import position from "./components/position";
 import * as renderSystem from "./systems/render";
 import * as movementSystem from "./systems/movement";
 
-export const ECS = {
+const ECS = {
   entities: {},
   components: {
     appearance,

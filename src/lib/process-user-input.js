@@ -1,7 +1,7 @@
 import ECS from "../ECS";
 import { getPlayer } from "./getters";
 
-export default function processUserInput() {
+const processUserInput = () => {
   const { userInput } = ECS.game;
 
   if (!userInput) {
@@ -14,4 +14,6 @@ export default function processUserInput() {
   if (type === "MOVE") {
     player.addComponent("moveTo", payload);
   }
-}
+};
+
+export default processUserInput;
