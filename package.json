@@ -9,7 +9,7 @@
     "test": "jest",
     "posttest": "rm -rf .babelrc",
     "test:w": "cp config/.babelrc .babelrc && jest --watch",
-    "predeploy": "rm -rf dist && npm run clearcache && npm run build && npm run test",
+    "predeploy": "rm -rf dist && npm run clearcache && npm run test && npm run build",
     "deploy": "gh-pages -d dist/default",
     "clearcache": "rm -rf .parcel-cache"
   },
