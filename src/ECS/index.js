@@ -2,6 +2,7 @@ import { filter } from "lodash";
 import { pxToCell } from "../lib/canvas";
 
 import appearance from "./components/appearance";
+import blocking from "./components/blocking";
 import moveTo from "./components/move-to";
 import position from "./components/position";
 
@@ -12,6 +13,7 @@ const ECS = {
   entities: {},
   components: {
     appearance,
+    blocking,
     moveTo,
     position
   },
