@@ -1,3 +1,6 @@
+import { filter } from "lodash";
+import { pxToCell } from "../lib/canvas";
+
 import appearance from "./components/appearance";
 import moveTo from "./components/move-to";
 import position from "./components/position";
@@ -30,6 +33,20 @@ const ECS = {
       }
     }
   }
+};
+
+const canvas = document.querySelector("#canvas");
+
+canvas.onclick = e => {
+  const [x, y] = pxToCell(e);
+
+  const entities = filter(
+    ECS.entities,
+    entity =>
+      entity.components.position.x === x && entity.components.position.y === y
+  );
+
+  entities.forEach(entity => entity.print());
 };
 
 export default ECS;

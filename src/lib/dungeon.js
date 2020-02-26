@@ -59,8 +59,8 @@ export const generateDungeon = ({
   for (let r of Array(maxRoomCount).keys()) {
     let rw = random(minRoomSize, maxRoomSize);
     let rh = random(minRoomSize, maxRoomSize);
-    let rx = random(x, width - rw - 1);
-    let ry = random(y, height - rh - 1);
+    let rx = random(x, width + x - rw - 1);
+    let ry = random(y, height + y - rh - 1);
 
     // create a candidate room
     // todo: perf - don't bother filling this in here - wait till it's accepted
