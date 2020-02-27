@@ -3,21 +3,26 @@ import { pxToCell } from "../lib/canvas";
 
 import appearance from "./components/appearance";
 import blocking from "./components/blocking";
+import fov from "./components/fov";
 import moveTo from "./components/move-to";
+import opaque from "./components/opaque";
 import position from "./components/position";
 
-import * as renderSystem from "./systems/render";
+import * as fovSystem from "./systems/fov";
 import * as movementSystem from "./systems/movement";
+import * as renderSystem from "./systems/render";
 
 const ECS = {
   entities: {},
   components: {
     appearance,
     blocking,
+    fov,
     moveTo,
+    opaque,
     position
   },
-  systems: [movementSystem, renderSystem],
+  systems: [movementSystem, fovSystem, renderSystem],
   game: {
     playerId: null,
     paused: false,

@@ -25,6 +25,7 @@ const initDungeonLevel = () => {
       char = chars.wall;
       color = colors.wall;
       entity.addComponent("blocking");
+      entity.addComponent("opaque");
     }
     if (currTile.sprite === "FLOOR") {
       char = chars.floor;
@@ -37,6 +38,7 @@ const initDungeonLevel = () => {
 
     entity.addComponent("appearance", { char, color });
     entity.addComponent("position", { x: currTile.x, y: currTile.y });
+    entity.addComponent("fov", { showIfRevealed: true });
 
     getECS().entities[entity.id] = entity;
   });
