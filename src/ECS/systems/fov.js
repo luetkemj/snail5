@@ -26,7 +26,14 @@ export const fov = eIds => {
     }
   });
 
-  const FOV = createFOV(blockingLocations, width, height, originX, originY, 8);
+  const FOV = createFOV(
+    blockingLocations,
+    width,
+    height,
+    originX,
+    originY,
+    100
+  );
 
   eIds.forEach(eId => {
     const entity = getEntity(eId);

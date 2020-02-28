@@ -20,11 +20,16 @@ export const render = eIds => {
     Object.values(layerGroups[layer]).forEach(entity => {
       const { appearance, position, fov } = entity.components;
       if (appearance && position && fov.inFov) {
-        return drawCell(entity);
+        // ((fov.distanceFromSource * -1) / lightSourceRange) * 100
+        const opacity = ((fov.distance * -1) / 4) * 100;
+        console.log(opacity);
+
+        drawCell(entity, { char: { da: opacity, ds: 0 } });
+        // return drawCell(entity);
       }
 
       if (fov.showIfRevealed && fov.revealed && !fov.inFov) {
-        drawCell(entity, { char: { da: -75, ds: 0 } });
+        drawCell(entity, { char: { da: -90, ds: 0 } });
       }
     });
   });
