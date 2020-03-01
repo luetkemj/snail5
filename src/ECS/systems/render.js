@@ -30,6 +30,4 @@ export const render = eIds => {
       }
     });
   });
-
-  console.log(getPlayer());
 };
