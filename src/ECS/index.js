@@ -2,13 +2,17 @@ import { filter } from "lodash";
 import { pxToCell } from "../lib/canvas";
 
 import appearance from "./components/appearance";
-import blocking from "./components/blocking";
-import fov from "./components/fov";
+import isBlocking from "./components/is-blocking";
+import isInFov from "./components/is-in-fov";
+import isRevealed from "./components/is-revealed";
+import lightsource from "./components/lightsource";
+import lux from "./components/lux";
 import moveTo from "./components/move-to";
-import opaque from "./components/opaque";
+import isOpaque from "./components/is-opaque";
 import position from "./components/position";
 
 import * as fovSystem from "./systems/fov";
+import * as lightSystem from "./systems/light";
 import * as movementSystem from "./systems/movement";
 import * as renderSystem from "./systems/render";
 
@@ -16,13 +20,16 @@ const ECS = {
   entities: {},
   components: {
     appearance,
-    blocking,
-    fov,
+    isBlocking,
+    isInFov,
+    isRevealed,
+    lightsource,
+    lux,
     moveTo,
-    opaque,
+    isOpaque,
     position
   },
-  systems: [movementSystem, fovSystem, renderSystem],
+  systems: [movementSystem, lightSystem, fovSystem, renderSystem],
   game: {
     playerId: null,
     paused: false,

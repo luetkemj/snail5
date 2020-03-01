@@ -1,3 +1,4 @@
+import { random } from "lodash";
 import { getECS } from "../lib/getters";
 import Entity from "../ECS/Entity";
 import { generateDungeon } from "../lib/dungeon";
@@ -24,8 +25,8 @@ const initDungeonLevel = () => {
     if (currTile.sprite === "WALL") {
       char = chars.wall;
       color = colors.wall;
-      entity.addComponent("blocking");
-      entity.addComponent("opaque");
+      entity.addComponent("isBlocking");
+      entity.addComponent("isOpaque");
     }
     if (currTile.sprite === "FLOOR") {
       char = chars.floor;
@@ -38,7 +39,6 @@ const initDungeonLevel = () => {
 
     entity.addComponent("appearance", { char, color });
     entity.addComponent("position", { x: currTile.x, y: currTile.y });
-    entity.addComponent("fov", { showIfRevealed: true });
 
     getECS().entities[entity.id] = entity;
   });
