@@ -1,3 +1,3 @@
-const componentIsRevealed = isRevealed => true;
+const componentIsRevealed = () => true;
 
 export default componentIsRevealed;

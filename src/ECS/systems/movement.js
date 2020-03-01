@@ -27,7 +27,7 @@ export const movement = eIds => {
       return (
         e.components.position.x === mx &&
         e.components.position.y === my &&
-        e.components.blocking
+        e.components.isBlocking
       );
     });
 

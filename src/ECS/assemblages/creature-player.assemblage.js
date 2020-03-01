@@ -10,7 +10,7 @@ const playerAssemblage = (x, y) => {
   entity.components.position.x = x;
   entity.components.position.y = y;
 
-  entity.addComponent("lightsource", { range: 8 });
+  entity.addComponent("lightsource", { range: 6 });
 
   return entity;
 };

@@ -9,6 +9,8 @@ const creatureAssemblage = () => {
     layer: layers.player
   });
   entity.addComponent("position");
+  entity.addComponent("isOpaque");
+  entity.addComponent("isBlocking");
 
   return entity;
 };

@@ -25,8 +25,8 @@ const initDungeonLevel = () => {
     if (currTile.sprite === "WALL") {
       char = chars.wall;
       color = colors.wall;
-      entity.addComponent("blocking");
-      entity.addComponent("opaque");
+      entity.addComponent("isBlocking");
+      entity.addComponent("isOpaque");
     }
     if (currTile.sprite === "FLOOR") {
       char = chars.floor;

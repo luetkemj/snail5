@@ -12,7 +12,7 @@ export const light = eIds => {
     }
   } = getECS();
 
-  let blockingLocations = [];
+  let opaqueLocations = [];
   const entitiesByLocation = groupBy(getECS().entities, entity => {
     const { x, y } = entity.components.position;
     const locId = `${x},${y}`;
@@ -23,9 +23,9 @@ export const light = eIds => {
     const entity = getEntity(eId);
     // remove lux component from everyone to start fresh
     entity.removeComponent("lux");
-    if (entity.components.opaque) {
+    if (entity.components.isOpaque) {
       const locId = `${entity.components.position.x},${entity.components.position.y}`;
-      blockingLocations.push(locId);
+      opaqueLocations.push(locId);
     }
   });
 
@@ -36,7 +36,7 @@ export const light = eIds => {
     const originY = lsEntity.components.position.y;
 
     const FOV = createFOV(
-      blockingLocations,
+      opaqueLocations,
       width,
       height,
       originX,

@@ -17,7 +17,7 @@ export const fov = eIds => {
   const originX = getPlayer().components.position.x;
   const originY = getPlayer().components.position.y;
 
-  let blockingLocations = [];
+  let opaqueLocations = [];
   const entitiesByLocation = groupBy(entities, entity => {
     const { x, y } = entity.components.position;
     const locId = `${x},${y}`;
@@ -26,31 +26,24 @@ export const fov = eIds => {
 
   Object.keys(entities).forEach(eId => {
     const entity = getEntity(eId);
-    if (entity.components.opaque) {
+    if (entity.components.isOpaque) {
       const locId = `${entity.components.position.x},${entity.components.position.y}`;
-      blockingLocations.push(locId);
+      opaqueLocations.push(locId);
     }
   });
 
-  const FOV = createFOV(
-    blockingLocations,
-    width,
-    height,
-    originX,
-    originY,
-    100
-  );
+  const FOV = createFOV(opaqueLocations, width, height, originX, originY, 100);
 
   eIds.forEach(eId => {
     const entity = getEntity(eId);
     const locId = `${entity.components.position.x},${entity.components.position.y}`;
     if (FOV.fov.includes(locId)) {
-      entity.addComponent("inFov");
+      entity.addComponent("isInFov");
       if (entity.components.lux) {
         entity.addComponent("isRevealed");
       }
     } else {
-      entity.removeComponent("inFov");
+      entity.removeComponent("isInFov");
     }
   });
 };
