@@ -46,6 +46,9 @@ export const fov = eIds => {
     const locId = `${entity.components.position.x},${entity.components.position.y}`;
     if (FOV.fov.includes(locId)) {
       entity.addComponent("inFov");
+      if (entity.components.lux) {
+        entity.addComponent("isRevealed");
+      }
     } else {
       entity.removeComponent("inFov");
     }

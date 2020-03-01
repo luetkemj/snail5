@@ -22,6 +22,12 @@ export const render = eIds => {
       if (appearance && position && inFov && lux >= 0) {
         drawCell(entity, { char: { a: lux, ds: 0 } });
       }
+
+      if (entity.components.isRevealed) {
+        if (!inFov || (inFov && !lux)) {
+          drawCell(entity, { char: { a: 10, s: 0 } });
+        }
+      }
     });
   });
 
