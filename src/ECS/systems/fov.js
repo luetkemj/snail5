@@ -1,24 +1,30 @@
-import ECS from "../";
+import { groupBy } from "lodash";
 import createFOV from "../../lib/fov";
-import { getEntity, getPlayer } from "../../lib/getters";
+import { getECS, getEntity, getPlayer } from "../../lib/getters";
 
 export const name = "fov";
-export const reqs = ["position", "fov"];
+export const reqs = ["position"];
 
 export const fov = eIds => {
   const {
+    entities,
     game: {
       grid: { width, height }
     }
-  } = ECS;
+  } = getECS();
 
+  // todo: don't getPlayer() use a component instead...
   const originX = getPlayer().components.position.x;
   const originY = getPlayer().components.position.y;
 
-  // build entities structure entities at location
   let blockingLocations = [];
+  const entitiesByLocation = groupBy(entities, entity => {
+    const { x, y } = entity.components.position;
+    const locId = `${x},${y}`;
+    return locId;
+  });
 
-  eIds.forEach(eId => {
+  Object.keys(entities).forEach(eId => {
     const entity = getEntity(eId);
     if (entity.components.opaque) {
       const locId = `${entity.components.position.x},${entity.components.position.y}`;
@@ -39,11 +45,9 @@ export const fov = eIds => {
     const entity = getEntity(eId);
     const locId = `${entity.components.position.x},${entity.components.position.y}`;
     if (FOV.fov.includes(locId)) {
-      entity.components.fov.inFov = true;
-      entity.components.fov.revealed = true;
-      entity.components.fov.distance = FOV.distance[locId];
+      entity.addComponent("inFov");
     } else {
-      entity.components.fov.inFov = false;
+      entity.removeComponent("inFov");
     }
   });
 };

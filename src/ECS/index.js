@@ -4,6 +4,7 @@ import { pxToCell } from "../lib/canvas";
 import appearance from "./components/appearance";
 import blocking from "./components/blocking";
 import fov from "./components/fov";
+import inFov from "./components/in-fov";
 import lightsource from "./components/lightsource";
 import lux from "./components/lux";
 import moveTo from "./components/move-to";
@@ -21,6 +22,7 @@ const ECS = {
     appearance,
     blocking,
     fov,
+    inFov,
     lightsource,
     lux,
     moveTo,

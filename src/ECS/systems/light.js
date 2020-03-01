@@ -44,16 +44,14 @@ export const light = eIds => {
       range
     );
 
-    console.log(FOV);
-
     const { fov, distance } = FOV;
 
     fov.forEach(locId => {
-      const opacity = ((distance[locId] * -1) / 4) * 100;
+      const opacity = ((distance[locId] * -1) / range) * 100;
 
       entitiesByLocation[locId].forEach(entity => {
         if (entity.components.lux) {
-          entity.components.lux += opacity; // opacity is a negative number! may need to adjust math here...
+          entity.components.lux -= opacity; // opacity is a negative number! may need to adjust math here...
         } else {
           entity.addComponent("lux", opacity);
         }

@@ -3,7 +3,7 @@ import { groupBy } from "lodash";
 import { clearCanvas, drawCell } from "../../lib/canvas";
 
 export const name = "render";
-export const reqs = ["appearance", "position", "fov"];
+export const reqs = ["appearance", "position"];
 export const render = eIds => {
   clearCanvas();
 
@@ -18,19 +18,14 @@ export const render = eIds => {
 
   layerCake.forEach(layer => {
     Object.values(layerGroups[layer]).forEach(entity => {
-      const { appearance, position, fov } = entity.components;
-      if (appearance && position && fov.inFov) {
-        // ((fov.distanceFromSource * -1) / lightSourceRange) * 100
-        const opacity = ((fov.distance * -1) / 4) * 100;
-        // console.log(opacity);
-
-        drawCell(entity, { char: { da: opacity, ds: 0 } });
-        // return drawCell(entity);
+      const { appearance, position, inFov, lux } = entity.components;
+      if (appearance && position && inFov && lux <= 0) {
+        drawCell(entity, { char: { da: lux, ds: 0 } });
       }
 
-      if (fov.showIfRevealed && fov.revealed && !fov.inFov) {
-        drawCell(entity, { char: { da: -90, ds: 0 } });
-      }
+      // if (fov.showIfRevealed && fov.revealed && !fov.inFov) {
+      //   drawCell(entity, { char: { da: -90, ds: 0 } });
+      // }
     });
   });
 };
