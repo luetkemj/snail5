@@ -10,7 +10,8 @@ const playerAssemblage = (x, y) => {
   entity.components.position.x = x;
   entity.components.position.y = y;
 
-  entity.addComponent("fov", { range: 8 });
+  entity.addComponent("fov", { range: 4 });
+  entity.addComponent("lightsource", { range: 2 });
 
   return entity;
 };

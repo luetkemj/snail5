@@ -22,7 +22,7 @@ export const render = eIds => {
       if (appearance && position && fov.inFov) {
         // ((fov.distanceFromSource * -1) / lightSourceRange) * 100
         const opacity = ((fov.distance * -1) / 4) * 100;
-        console.log(opacity);
+        // console.log(opacity);
 
         drawCell(entity, { char: { da: opacity, ds: 0 } });
         // return drawCell(entity);
