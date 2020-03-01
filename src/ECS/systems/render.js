@@ -1,6 +1,6 @@
-import ECS from "..";
 import { groupBy } from "lodash";
 import { clearCanvas, drawCell } from "../../lib/canvas";
+import { getECS, getPlayer } from "../../lib/getters";
 
 export const name = "render";
 export const reqs = ["appearance", "position"];
@@ -9,7 +9,7 @@ export const render = eIds => {
 
   // render map
   const entities = eIds.reduce((acc, val) => {
-    acc[val] = ECS.entities[val];
+    acc[val] = getECS().entities[val];
     return acc;
   }, {});
 
@@ -19,13 +19,11 @@ export const render = eIds => {
   layerCake.forEach(layer => {
     Object.values(layerGroups[layer]).forEach(entity => {
       const { appearance, position, inFov, lux } = entity.components;
-      if (appearance && position && inFov && lux <= 0) {
-        drawCell(entity, { char: { da: lux, ds: 0 } });
+      if (appearance && position && inFov && lux >= 0) {
+        drawCell(entity, { char: { a: lux, ds: 0 } });
       }
-
-      // if (fov.showIfRevealed && fov.revealed && !fov.inFov) {
-      //   drawCell(entity, { char: { da: -90, ds: 0 } });
-      // }
     });
   });
+
+  console.log(getPlayer());
 };
