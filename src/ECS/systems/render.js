@@ -25,7 +25,7 @@ export const render = eIds => {
 
       if (entity.components.isRevealed) {
         if (!isInFov || (isInFov && !lux)) {
-          drawCell(entity, { char: { a: 7.5 } });
+          drawCell(entity, { char: { a: 7.5, s: 100, h: 200 } });
         }
       }
     });
