@@ -21,8 +21,8 @@ export const light = eIds => {
 
   Object.keys(getECS().entities).forEach(eId => {
     const entity = getEntity(eId);
-    // remove lux component from everyone to start fresh
-    entity.removeComponent("lux");
+    // remove light component from everyone to start fresh
+    entity.removeComponent("light");
     if (entity.components.isOpaque) {
       const locId = `${entity.components.position.x},${entity.components.position.y}`;
       opaqueLocations.push(locId);
@@ -50,11 +50,13 @@ export const light = eIds => {
       const opacity = ((range - distance[locId] || 1) / range) * 100;
 
       entitiesByLocation[locId].forEach(entity => {
-        if (entity.components.lux) {
-          entity.components.lux += opacity; // opacity is a negative number! may need to adjust math here...
+        if (entity.components.light) {
+          entity.components.light.a += opacity;
         } else {
-          entity.addComponent("lux", opacity);
+          entity.addComponent("light", { a: opacity });
         }
+
+        entity.components.light.sources.push(eId);
       });
     });
   });

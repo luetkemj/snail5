@@ -5,8 +5,8 @@ import appearance from "./components/appearance";
 import isBlocking from "./components/is-blocking";
 import isInFov from "./components/is-in-fov";
 import isRevealed from "./components/is-revealed";
+import light from "./components/light";
 import lightsource from "./components/lightsource";
-import lux from "./components/lux";
 import moveTo from "./components/move-to";
 import isOpaque from "./components/is-opaque";
 import position from "./components/position";
@@ -23,8 +23,8 @@ const ECS = {
     isBlocking,
     isInFov,
     isRevealed,
+    light,
     lightsource,
-    lux,
     moveTo,
     isOpaque,
     position

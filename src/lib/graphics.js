@@ -6,6 +6,9 @@ export const colors = {
 
   inventoryHighlight: color("#A9CCE3"),
 
+  // light:
+  torchLight: color("#DAA520"),
+
   // items:
   armor: color("#DAA520"),
   bandage: color("#F7DC6F"),
