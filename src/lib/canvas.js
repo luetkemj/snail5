@@ -1,7 +1,3 @@
-// import { throttle } from "lodash";
-import { updateHSLA } from "./hsla";
-// import render from "../ECS/systems/render.system";
-
 const pixelRatio = window.devicePixelRatio || 1;
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
@@ -108,7 +104,7 @@ ctx.textBaseline = "middle";
 const drawBackground = (color, position) => {
   if (color === "transparent") return;
 
-  ctx.fillStyle = color.hsla;
+  ctx.fillStyle = color.hsl().string("hsla");
   ctx.fillRect(
     position.x * cellWidth,
     position.y * cellHeight,
@@ -118,7 +114,7 @@ const drawBackground = (color, position) => {
 };
 
 const drawChar = (char, color, position) => {
-  ctx.fillStyle = color.hsla;
+  ctx.fillStyle = color.hsl().string("hsla");
   ctx.fillText(
     char,
     position.x * cellWidth + cellWidth / 2,
@@ -126,19 +122,17 @@ const drawChar = (char, color, position) => {
   );
 };
 
-export const drawCell = (entity, HSLAOptions = { bg: {}, char: {} }) => {
+export const drawCell = (entity, colors = {}) => {
+  const { fg, bg } = colors;
   const {
     components: {
-      appearance: { char, color, background },
+      appearance: { char, background, color },
       position
     }
   } = entity;
 
-  const bgColor =
-    background === "transparent"
-      ? "transparent"
-      : updateHSLA(background, HSLAOptions.bg || {});
-  const charColor = updateHSLA(color, HSLAOptions.char || {});
+  const bgColor = bg ? bg : background;
+  const charColor = fg ? fg : color;
 
   drawBackground(bgColor, position);
   drawChar(char, charColor, position);

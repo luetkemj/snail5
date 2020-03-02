@@ -1,33 +1,33 @@
-import { hexToHSLA } from "./hsla";
+import color from "color";
 
 export const colors = {
-  defaultColor: hexToHSLA("#ff0077"),
-  defaultBGColor: hexToHSLA("#000"),
+  defaultColor: color("#ff0077"),
+  defaultBGColor: color("#000"),
 
-  inventoryHighlight: hexToHSLA("#A9CCE3"),
+  inventoryHighlight: color("#A9CCE3"),
 
   // items:
-  armor: hexToHSLA("#DAA520"),
-  bandage: hexToHSLA("#F7DC6F"),
-  chest: hexToHSLA("#DAA520"),
-  currency: hexToHSLA("#DAA520"),
-  multipleItems: hexToHSLA("#DAA520"),
-  potion: hexToHSLA("#DAA520"),
-  weapon: hexToHSLA("#DAA520"),
+  armor: color("#DAA520"),
+  bandage: color("#F7DC6F"),
+  chest: color("#DAA520"),
+  currency: color("#DAA520"),
+  multipleItems: color("#DAA520"),
+  potion: color("#DAA520"),
+  weapon: color("#DAA520"),
   // log
-  hudText: hexToHSLA("#fff"),
-  healthBar: hexToHSLA("#B91906"),
+  hudText: color("#fff"),
+  healthBar: color("#B91906"),
   // maps
-  wall: hexToHSLA("#AAA"),
-  floor: hexToHSLA("#555"),
-  cavernFloor: hexToHSLA("#71331E"),
-  stairsUp: hexToHSLA("#AAA"),
-  stairsDown: hexToHSLA("#AAA"),
+  wall: color("#AAA"),
+  floor: color("#555"),
+  cavernFloor: color("#71331E"),
+  stairsUp: color("#AAA"),
+  stairsDown: color("#AAA"),
   // player
-  player: hexToHSLA("#FFF"),
+  player: color("#FFF"),
   // monsters
-  goblin: hexToHSLA("#0C9"),
-  rat: hexToHSLA("#F1948A")
+  goblin: color("#0C9"),
+  rat: color("#F1948A")
 };
 
 export const chars = {

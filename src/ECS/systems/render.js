@@ -20,12 +20,21 @@ export const render = eIds => {
     Object.values(layerGroups[layer]).forEach(entity => {
       const { appearance, position, isInFov, lux } = entity.components;
       if (appearance && position && isInFov && lux >= 0) {
-        drawCell(entity, { char: { a: lux, ds: 0 } });
+        appearance.color = appearance.color.alpha(lux / 100);
+
+        const fg = appearance.color.alpha(lux / 100).mix();
+
+        drawCell(entity, { fg });
       }
 
       if (entity.components.isRevealed) {
         if (!isInFov || (isInFov && !lux)) {
-          drawCell(entity, { char: { a: 7.5, s: 100, h: 200 } });
+          drawCell(entity, {
+            fg: appearance.color
+              .alpha(0.075)
+              .saturationl(100)
+              .hue(200)
+          });
         }
       }
     });
