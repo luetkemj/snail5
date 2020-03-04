@@ -9,6 +9,8 @@ export const colors = {
   // light:
   torchLight: color("#FFD00E"),
 
+  campfire: color("#FFD00E"),
+
   // items:
   armor: color("#DAA520"),
   bandage: color("#F7DC6F"),
@@ -35,6 +37,8 @@ export const colors = {
 
 export const chars = {
   defaultChar: "?",
+  // staging
+  campfire: "ô", // ö o
   // equipment
   armor: "[",
   weapon: ")",

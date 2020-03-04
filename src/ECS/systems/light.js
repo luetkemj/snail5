@@ -47,16 +47,23 @@ export const light = eIds => {
     const { fov, distance } = FOV;
 
     fov.forEach(locId => {
-      const opacity = ((range - distance[locId] || 1) / range) * 100;
+      const opacity = ((range - distance[locId]) / range) * 100;
 
       entitiesByLocation[locId].forEach(entity => {
-        if (entity.components.light) {
-          entity.components.light.a += opacity;
-        } else {
-          entity.addComponent("light", { a: opacity });
+        if (!entity.components.isOpaque) {
+          if (entity.components.light) {
+            entity.components.light.a += opacity;
+          } else {
+            entity.addComponent("light", { a: opacity });
+          }
+
+          entity.components.light.sources.push(eId);
         }
 
-        entity.components.light.sources.push(eId);
+        if (entity.components.lightsource) {
+          entity.addComponent("light", { a: 100 });
+          entity.components.light.sources.push(eId);
+        }
       });
     });
   });

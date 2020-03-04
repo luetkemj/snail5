@@ -9,7 +9,6 @@ const initGame = () => {
 
   // Create player
   const player = createPlayer(start.x, start.y);
-  createPlayer(start.x + 1, start.y) + 1;
 
   ECS.game.playerId = player.id;
 };

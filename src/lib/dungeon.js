@@ -105,5 +105,5 @@ export const generateDungeon = ({
     tileId => !processedTiles[tileId].blocking
   );
 
-  return { tiles: processedTiles, start: rooms[0].center, openTileIds };
+  return { tiles: processedTiles, start: rooms[0].center, openTileIds, rooms };
 };

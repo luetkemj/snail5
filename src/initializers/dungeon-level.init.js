@@ -1,3 +1,4 @@
+import createCampFire from "../ECS/assemblages/fire.assemblage";
 import { random } from "lodash";
 import { getECS } from "../lib/getters";
 import Entity from "../ECS/Entity";
@@ -42,6 +43,13 @@ const initDungeonLevel = () => {
 
     getECS().entities[entity.id] = entity;
   });
+
+  const camp1 = dungeon.rooms[1] && dungeon.rooms[1].center;
+  const camp2 = dungeon.rooms[2] && dungeon.rooms[2].center;
+
+  createCampFire(dungeon.start.x + 1, dungeon.start.y + 1);
+  camp1 && createCampFire(camp1.x, camp1.y);
+  camp2 && createCampFire(camp2.x, camp2.y);
 
   return dungeon;
 };
