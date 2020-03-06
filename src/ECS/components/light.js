@@ -1,7 +1,8 @@
-const componentLight = (params = { a: 0 }) => {
+const componentLight = params => {
   return {
-    a: params.a,
-    sources: params.sources || []
+    a: params.a || 0,
+    sources: params.sources || [],
+    color: params.color || null
   };
 };
 

@@ -29,7 +29,7 @@ const ECS = {
     isOpaque,
     position
   },
-  systems: [movementSystem, lightSystem, fovSystem, renderSystem],
+  systems: [movementSystem, fovSystem, lightSystem, renderSystem],
   game: {
     playerId: null,
     paused: false,

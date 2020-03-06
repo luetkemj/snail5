@@ -1,9 +1,10 @@
 import { groupBy } from "lodash";
-import { getECS, getEntity } from "../../lib/getters";
+import { getECS, getEntity, getPlayer } from "../../lib/getters";
 import createFOV from "../../lib/fov";
+import { getNeighborIds } from "../../lib/grid";
 
 export const name = "light";
-export const reqs = ["lightsource", "position"];
+export const reqs = ["lightsource", "position", "appearance"];
 
 export const light = eIds => {
   const {
@@ -29,6 +30,10 @@ export const light = eIds => {
     }
   });
 
+  // store lit entity ids so we can mix light colors later
+  const litEntityIds = [];
+
+  // initial lighting
   eIds.forEach(eId => {
     const lsEntity = getEntity(eId);
     const { range } = lsEntity.components.lightsource;
@@ -55,6 +60,7 @@ export const light = eIds => {
             entity.components.light.a += opacity;
           } else {
             entity.addComponent("light", { a: opacity });
+            litEntityIds.push(entity.id);
           }
 
           entity.components.light.sources.push(eId);
@@ -63,8 +69,76 @@ export const light = eIds => {
         if (entity.components.lightsource) {
           entity.addComponent("light", { a: 100 });
           entity.components.light.sources.push(eId);
+          litEntityIds.push(entity.id);
         }
       });
     });
+  });
+
+  // light source mixing
+  Object.keys(getECS().entities).forEach(eId => {
+    const entity = getEntity(eId);
+    const { appearance, light } = entity.components;
+
+    if (light) {
+      light.sources.forEach(sourceId => {
+        const { color, weight } = getEntity(sourceId).components.lightsource;
+        let fg = appearance.color.alpha(light.a / 100);
+        entity.components.light.color = fg.mix(color, weight);
+      });
+    }
+  });
+
+  // Opaque entities lighting
+  // todo: don't getPlayer() use a component instead...
+  const pOriginX = getPlayer().components.position.x;
+  const pOriginY = getPlayer().components.position.y;
+  const FOV = createFOV(
+    opaqueLocations,
+    width,
+    height,
+    pOriginX,
+    pOriginY,
+    100
+  );
+
+  Object.keys(getECS().entities).forEach(eId => {
+    const entity = getEntity(eId);
+    // test for opaque locations that are not a lightsource.
+    if (entity.components.isOpaque && !entity.components.lightsource) {
+      let brightestLight = 0;
+      let light = null;
+
+      // get all of it's neighbors
+      const locIds = getNeighborIds(
+        entity.components.position.x,
+        entity.components.position.y
+      ).filter(locId => FOV.fov.includes(locId));
+
+      // get brightest light from all neighbors and set light to that
+      // if no neighors are lit - stay dark :)
+      locIds.forEach(locId => {
+        entitiesByLocation[locId].forEach(e => {
+          if (e.components.light && !e.components.isOpaque) {
+            if (brightestLight < e.components.light.a) {
+              brightestLight = e.components.light.a;
+              light = {
+                a: e.components.light.a,
+                sources: e.components.light.sources
+              };
+            }
+          }
+        });
+      });
+
+      if (brightestLight) {
+        entity.addComponent("light", light);
+        entity.components.light.sources.forEach(sourceId => {
+          const { color, weight } = getEntity(sourceId).components.lightsource;
+          let fg = entity.components.appearance.color.alpha(light.a / 100);
+          entity.components.light.color = fg.mix(color, weight);
+        });
+      }
+    }
   });
 };
