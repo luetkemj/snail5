@@ -10,7 +10,14 @@ const playerAssemblage = (x, y) => {
   entity.components.position.x = x;
   entity.components.position.y = y;
 
-  entity.addComponent("lightsource", { range: 4 });
+  entity.addComponent("lightsource", { range: 2.5 });
+
+  entity.addComponent("name", {
+    name: "You",
+    possesive: "your"
+  });
+
+  entity.addComponent("canBeOnLegend");
 
   return entity;
 };

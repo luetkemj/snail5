@@ -38,6 +38,18 @@ export const rectangle = ({ x, y, width, height, hasWalls }, tileProps) => {
   return { x1, x2, y1, y2, center, hasWalls, tiles };
 };
 
+// export const circle = (center, radius, grid) => {
+//   const locIds = [];
+//   grid.forEach(cell => {
+//     if (distance(center, cell) <= radius) {
+//       locIds.push(cellToId(cell));
+//     }
+//   });
+
+//   console.log(locIds);
+//   return locIds;
+// };
+
 export const rectsIntersect = (rect1, rect2) => {
   return (
     rect1.x1 <= rect2.x2 &&

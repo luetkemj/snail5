@@ -3,11 +3,13 @@ import { pxToCell } from "../lib/canvas";
 
 import appearance from "./components/appearance";
 import isBlocking from "./components/is-blocking";
+import canBeOnLegend from "./components/can-be-on-legend";
 import isInFov from "./components/is-in-fov";
 import isRevealed from "./components/is-revealed";
 import light from "./components/light";
 import lightsource from "./components/lightsource";
 import moveTo from "./components/move-to";
+import name from "./components/name";
 import isOpaque from "./components/is-opaque";
 import position from "./components/position";
 
@@ -21,11 +23,13 @@ const ECS = {
   components: {
     appearance,
     isBlocking,
+    canBeOnLegend,
     isInFov,
     isRevealed,
     light,
     lightsource,
     moveTo,
+    name,
     isOpaque,
     position
   },
@@ -39,6 +43,12 @@ const ECS = {
     grid: {
       width: 100,
       height: 34,
+      legend: {
+        width: 20,
+        height: 34,
+        x: 0,
+        y: 0
+      },
       map: {
         width: 79,
         height: 29,

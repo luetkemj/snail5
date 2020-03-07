@@ -54,24 +54,26 @@ export const light = eIds => {
     fov.forEach(locId => {
       const opacity = ((range - distance[locId]) / range) * 100;
 
-      entitiesByLocation[locId].forEach(entity => {
-        if (!entity.components.isOpaque) {
-          if (entity.components.light) {
-            entity.components.light.a += opacity;
-          } else {
-            entity.addComponent("light", { a: opacity });
-            litEntityIds.push(entity.id);
+      if (entitiesByLocation[locId]) {
+        entitiesByLocation[locId].forEach(entity => {
+          if (!entity.components.isOpaque) {
+            if (entity.components.light) {
+              entity.components.light.a += opacity;
+            } else {
+              entity.addComponent("light", { a: opacity });
+              litEntityIds.push(entity.id);
+            }
+
+            entity.components.light.sources.push(eId);
           }
 
-          entity.components.light.sources.push(eId);
-        }
-
-        if (entity.components.lightsource) {
-          entity.addComponent("light", { a: 100 });
-          entity.components.light.sources.push(eId);
-          litEntityIds.push(entity.id);
-        }
-      });
+          if (entity.components.lightsource) {
+            entity.addComponent("light", { a: 100 });
+            entity.components.light.sources.push(eId);
+            litEntityIds.push(entity.id);
+          }
+        });
+      }
     });
   });
 
@@ -118,17 +120,19 @@ export const light = eIds => {
       // get brightest light from all neighbors and set light to that
       // if no neighors are lit - stay dark :)
       locIds.forEach(locId => {
-        entitiesByLocation[locId].forEach(e => {
-          if (e.components.light && !e.components.isOpaque) {
-            if (brightestLight < e.components.light.a) {
-              brightestLight = e.components.light.a;
-              light = {
-                a: e.components.light.a,
-                sources: e.components.light.sources
-              };
+        if (entitiesByLocation[locId]) {
+          entitiesByLocation[locId].forEach(e => {
+            if (e.components.light && !e.components.isOpaque) {
+              if (brightestLight < e.components.light.a) {
+                brightestLight = e.components.light.a;
+                light = {
+                  a: e.components.light.a,
+                  sources: e.components.light.sources
+                };
+              }
             }
-          }
-        });
+          });
+        }
       });
 
       if (brightestLight) {

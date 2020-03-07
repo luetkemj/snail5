@@ -13,7 +13,13 @@ const fireAssemblage = (x, y) => {
   });
   entity.addComponent("position", { x, y });
   entity.addComponent("isBlocking");
-  entity.addComponent("lightsource", { range: 8, color: colors.campfire });
+  entity.addComponent("lightsource", { range: 3.5, color: colors.campfire });
+  entity.addComponent("name", {
+    name: "Bonfire",
+    plural: "bonfires",
+    possesive: "bonfire's"
+  });
+  entity.addComponent("canBeOnLegend");
 
   return entity;
 };
