@@ -56,6 +56,9 @@ const ECS = {
         y: 3
       }
     }
+  },
+  cache: {
+    entitiesAtLocation: {}
   }
 };
 
@@ -71,6 +74,8 @@ canvas.onclick = e => {
   );
 
   entities.forEach(entity => entity.print());
+
+  console.log({ ECS });
 };
 
 export default ECS;

@@ -1,4 +1,8 @@
 import ECS from ".";
+import {
+  setCacheEntityAtLocation,
+  removeCacheEntityAtLocation
+} from "../lib/cache";
 
 const Entity = () => {
   const id =
@@ -9,9 +13,19 @@ const Entity = () => {
   const addComponent = (componentName, args = {}) => {
     const component = ECS.components[componentName](args);
     components[componentName] = component;
+
+    // cache entity location
+    if (componentName === "position") {
+      setCacheEntityAtLocation(entity);
+    }
   };
 
   const removeComponent = componentName => {
+    // remove entity from cache
+    if (componentName === "position") {
+      removeCacheEntityAtLocation(entity);
+    }
+
     delete components[componentName];
   };
 
