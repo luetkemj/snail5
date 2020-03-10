@@ -16,6 +16,7 @@ export const fov = eIds => {
   const originX = getPlayer().components.position.x;
   const originY = getPlayer().components.position.y;
 
+  // todo: cache this!
   let opaqueLocations = [];
 
   Object.keys(entities).forEach(eId => {

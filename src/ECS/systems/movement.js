@@ -1,9 +1,5 @@
 import { filter } from "lodash";
 import { getECS, getEntity } from "../../lib/getters";
-import {
-  setCacheEntityAtLocation,
-  removeCacheEntityAtLocation
-} from "../../lib/cache";
 
 export const name = "movement";
 export const reqs = ["position", "moveTo"];
@@ -40,16 +36,7 @@ export const movement = eIds => {
       return entity.removeComponent("moveTo");
     }
 
-    // entity is about to move. remove from entitiesAtLocation cache
-    removeCacheEntityAtLocation(entity);
-
-    // move!
-    entity.components.position.x = mx;
-    entity.components.position.y = my;
-
-    // entity has moved. add to entitiesAtLocation cache
-    setCacheEntityAtLocation(entity);
-
+    entity.updateComponent("position", { x: mx, y: my });
     entity.removeComponent("moveTo");
   });
 };

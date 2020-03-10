@@ -10,8 +10,8 @@ const Entity = () => {
 
   const components = {};
 
-  const addComponent = (componentName, args = {}) => {
-    const component = ECS.components[componentName](args);
+  const addComponent = (componentName, params = {}) => {
+    const component = ECS.components[componentName](params);
     components[componentName] = component;
 
     // cache entity location
@@ -29,6 +29,21 @@ const Entity = () => {
     delete components[componentName];
   };
 
+  const updateComponent = (componentName, params) => {
+    if (componentName === "position") {
+      removeCacheEntityAtLocation(entity);
+    }
+
+    entity.components[componentName] = {
+      ...entity.components[componentName],
+      ...params
+    };
+
+    if (componentName === "position") {
+      setCacheEntityAtLocation(entity);
+    }
+  };
+
   const print = function print() {
     console.log(JSON.parse(JSON.stringify(this, null, 2)));
   };
@@ -38,6 +53,7 @@ const Entity = () => {
     components,
     addComponent,
     removeComponent,
+    updateComponent,
     print
   };
 

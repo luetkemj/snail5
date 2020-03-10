@@ -3,6 +3,8 @@ import { getECS, getEntity, getPlayer } from "../../lib/getters";
 import createFOV from "../../lib/fov";
 import { getNeighborIds } from "../../lib/grid";
 
+import ECS from "../index";
+
 export const name = "light";
 export const reqs = ["lightsource", "position", "appearance"];
 
@@ -14,11 +16,7 @@ export const light = eIds => {
   } = getECS();
 
   let opaqueLocations = [];
-  const entitiesByLocation = groupBy(getECS().entities, entity => {
-    const { x, y } = entity.components.position;
-    const locId = `${x},${y}`;
-    return locId;
-  });
+  const entitiesByLocation = ECS.cache.entitiesAtLocation;
 
   Object.keys(getECS().entities).forEach(eId => {
     const entity = getEntity(eId);
@@ -55,21 +53,27 @@ export const light = eIds => {
       const opacity = ((range - distance[locId]) / range) * 100;
 
       if (entitiesByLocation[locId]) {
-        entitiesByLocation[locId].forEach(entity => {
+        entitiesByLocation[locId].forEach(entityId => {
+          const entity = getEntity(entityId);
+
           if (!entity.components.isOpaque) {
             if (entity.components.light) {
-              entity.components.light.a += opacity;
+              const a = entity.components.light.a + opacity;
+              entity.updateComponent("light", { a });
             } else {
               entity.addComponent("light", { a: opacity });
               litEntityIds.push(entity.id);
             }
 
-            entity.components.light.sources.push(eId);
+            const sources = [...entity.components.light.sources, eId];
+            entity.updateComponent("light", { sources });
           }
 
           if (entity.components.lightsource) {
             entity.addComponent("light", { a: 100 });
-            entity.components.light.sources.push(eId);
+
+            const sources = [...entity.components.light.sources, eId];
+            entity.updateComponent("light", { sources });
             litEntityIds.push(entity.id);
           }
         });
@@ -86,7 +90,9 @@ export const light = eIds => {
       light.sources.forEach(sourceId => {
         const { color, weight } = getEntity(sourceId).components.lightsource;
         let fg = appearance.color.alpha(light.a / 100);
-        entity.components.light.color = fg.mix(color, weight);
+
+        const mixedColor = fg.mix(color, weight);
+        entity.updateComponent("light", { color: mixedColor });
       });
     }
   });
@@ -121,7 +127,8 @@ export const light = eIds => {
       // if no neighors are lit - stay dark :)
       locIds.forEach(locId => {
         if (entitiesByLocation[locId]) {
-          entitiesByLocation[locId].forEach(e => {
+          entitiesByLocation[locId].forEach(id => {
+            const e = getEntity(id);
             if (e.components.light && !e.components.isOpaque) {
               if (brightestLight < e.components.light.a) {
                 brightestLight = e.components.light.a;
@@ -140,7 +147,9 @@ export const light = eIds => {
         entity.components.light.sources.forEach(sourceId => {
           const { color, weight } = getEntity(sourceId).components.lightsource;
           let fg = entity.components.appearance.color.alpha(light.a / 100);
-          entity.components.light.color = fg.mix(color, weight);
+
+          const mixedColor = fg.mix(color, weight);
+          entity.updateComponent("light", { color: mixedColor });
         });
       }
     }
