@@ -2,10 +2,10 @@ import ECS from "../ECS";
 import { sample } from "lodash";
 
 export const CARDINAL = [
-  { x: 0, y: -1 },
-  { x: 1, y: 0 },
-  { x: 0, y: 1 },
-  { x: -1, y: 0 }
+  { x: 0, y: -1 }, // N
+  { x: 1, y: 0 }, // E
+  { x: 0, y: 1 }, // S
+  { x: -1, y: 0 } // W
 ];
 
 export const rectangle = ({ x, y, width, height, hasWalls }, tileProps) => {
@@ -105,4 +105,21 @@ export const getNeighbor = (x, y, dir) => {
     x: x + direction.x,
     y: y + direction.y
   };
+};
+
+export const getDirection = (a, b) => {
+  const cellA = idToCell(a);
+  const cellB = idToCell(b);
+
+  const { x: ax, y: ay } = cellA;
+  const { x: bx, y: by } = cellB;
+
+  let dir;
+
+  if (ax - bx === 1 && ay - by === 0) dir = "→";
+  if (ax - bx === 0 && ay - by === -1) dir = "↑";
+  if (ax - bx === -1 && ay - by === 0) dir = "←";
+  if (ax - bx === 0 && ay - by === 1) dir = "↓";
+
+  return dir;
 };
