@@ -22,6 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "color": "3.1.2",
+    "flatqueue": "1.1.0",
     "lodash": "4.17.15",
     "scribe-rpg-coin-purse": "1.2.4",
     "wrap-ansi": "6.2.0"
