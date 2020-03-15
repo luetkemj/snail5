@@ -1,7 +1,6 @@
 import { some } from "lodash";
 import { getEntity, getECS } from "./getters";
 import { getDirection, getNeighborIds, idToCell } from "./grid";
-import ECS from "../ECS";
 
 import FlatQueue from "flatqueue";
 
@@ -95,7 +94,21 @@ export const aStar = (start, goal) => {
     const neighbors = getNeighborIds(idToCell(current).x, idToCell(current).y);
 
     neighbors.forEach(nLocId => {
-      const newCost = costSoFar[current] || 0; // + graph.cost(current, next) cells should have a movement cost that we add here -- https://www.redblobgames.com/pathfinding/a-star/introduction.html#astar
+      let cost = 100000;
+
+      cost = some(
+        getECS().cache.entitiesAtLocation[nLocId],
+        eId => getEntity(eId).components.isBlocking
+      )
+        ? 100
+        : 0;
+
+      if (nLocId === goal) {
+        cost = 0;
+      }
+
+      const newCost = (costSoFar[current] || 0) + cost; // + graph.cost(current, next) cells should have a movement cost that we add here -- https://www.redblobgames.com/pathfinding/a-star/introduction.html#astar
+
       if (!costSoFar[nLocId] || newCost < costSoFar[nLocId]) {
         costSoFar[nLocId] = newCost;
 
