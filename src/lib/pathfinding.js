@@ -2,7 +2,6 @@ import { some, each } from "lodash";
 import { getEntity, getECS } from "./getters";
 import { getDirection, getNeighborIds, idToCell } from "./grid";
 
-// import jsAstar from "javascript-astar";
 import { PathFinding } from "astarjs";
 
 export const floodFill = startLoc => {
@@ -72,64 +71,36 @@ export const breadthFirst = (startLoc, goalLoc) => {
   return cameFrom;
 };
 
-// manhattan distance on a square grid
-// https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
-export const heuristic = (a, b) => {
-  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-};
-
 const pfm = new PathFinding();
 
 export const aStar = (startLocId, endLocId) => {
   const start = idToCell(startLocId);
   const end = idToCell(endLocId);
 
-  const { width, height } = getECS().game.grid.map;
+  const {
+    width: mapWidth,
+    height: mapHeight,
+    x: mapx,
+    y: mapy
+  } = getECS().game.grid.map;
 
-  const grid = Array(29)
+  const grid = Array(mapHeight)
     .fill(1)
-    .map(x => Array(74).fill(1));
+    .map(x => Array(mapWidth).fill(1));
 
   each(getECS().cache.entitiesAtLocation, (val, locId) => {
     if (!some(val, eId => getEntity(eId).components.isBlocking)) {
       const loc = idToCell(locId);
-      // debugger;
-      grid[loc.y - 3][loc.x - 21] = 0;
+      grid[loc.y - mapy][loc.x - mapx] = 0;
     }
   });
 
   // // this should be cached maybe?
   pfm.setWalkable(0);
-  pfm.setStart({ col: start.x - 21, row: start.y - 3 });
-  pfm.setEnd({ col: end.x - 21, row: end.y - 3 });
+  pfm.setStart({ col: start.x - mapx, row: start.y - mapy });
+  pfm.setEnd({ col: end.x - mapx, row: end.y - mapy });
 
   const result = pfm.find(grid);
   console.log(result);
   return result;
 };
-
-// export const aStar = (start, goal) => {
-//   const { width, height } = getECS().game.grid.map;
-
-//   // this should be cached maybe?
-//   const grid = Array(width)
-//     .fill(0)
-//     .map(x => Array(height).fill(0));
-
-// each(getECS().cache.entitiesAtLocation, (val, locId) => {
-//   if (!some(val, eId => getEntity(eId).components.isBlocking)) {
-//     const loc = idToCell(locId);
-//     grid[loc.x - 21][loc.y - 3] = 1;
-//   }
-// });
-
-//   const graph = new jsAstar.Graph(grid);
-
-//   const startLoc = idToCell(start);
-//   const endLoc = idToCell(goal);
-
-//   const graphStart = graph.grid[startLoc.x][startLoc.y];
-//   const graphEnd = graph.grid[endLoc.x][endLoc.y];
-
-//   return jsAstar.astar.search(graph, graphStart, graphEnd);
-// };
