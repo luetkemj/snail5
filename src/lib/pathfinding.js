@@ -77,30 +77,23 @@ export const aStar = (startLocId, endLocId) => {
   const start = idToCell(startLocId);
   const end = idToCell(endLocId);
 
-  const {
-    width: mapWidth,
-    height: mapHeight,
-    x: mapx,
-    y: mapy
-  } = getECS().game.grid.map;
-
-  const grid = Array(mapHeight)
+  const grid = Array(30)
     .fill(1)
-    .map(x => Array(mapWidth).fill(1));
+    .map(x => Array(100).fill(1));
 
   each(getECS().cache.entitiesAtLocation, (val, locId) => {
     if (!some(val, eId => getEntity(eId).components.isBlocking)) {
       const loc = idToCell(locId);
-      grid[loc.y - mapy][loc.x - mapx] = 0;
+      if (grid[loc.y] && grid[loc.y][loc.x]) grid[loc.y][loc.x] = 0;
     }
   });
 
   // // this should be cached maybe?
   pfm.setWalkable(0);
-  pfm.setStart({ col: start.x - mapx, row: start.y - mapy });
-  pfm.setEnd({ col: end.x - mapx, row: end.y - mapy });
+  pfm.setStart({ col: start.x, row: start.y });
+  pfm.setEnd({ col: end.x, row: end.y });
 
   const result = pfm.find(grid);
-  console.log(result);
+  // console.log(result);
   return result;
 };
