@@ -94,6 +94,6 @@ export const aStar = (startLocId, endLocId) => {
   pfm.setEnd({ col: end.x, row: end.y });
 
   const result = pfm.find(grid);
-  // console.log(result);
+
   return result;
 };
