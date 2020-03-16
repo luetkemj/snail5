@@ -21,8 +21,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "astarjs": "1.1.0",
     "color": "3.1.2",
+    "easy-astar": "1.0.5",
     "flatqueue": "1.1.0",
+    "javascript-astar": "0.4.1",
     "lodash": "4.17.15",
     "scribe-rpg-coin-purse": "1.2.4",
     "wrap-ansi": "6.2.0"

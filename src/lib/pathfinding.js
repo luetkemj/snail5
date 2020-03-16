@@ -1,8 +1,9 @@
-import { some } from "lodash";
+import { some, each } from "lodash";
 import { getEntity, getECS } from "./getters";
 import { getDirection, getNeighborIds, idToCell } from "./grid";
 
-import FlatQueue from "flatqueue";
+// import jsAstar from "javascript-astar";
+import { PathFinding } from "astarjs";
 
 export const floodFill = startLoc => {
   const frontier = [startLoc];
@@ -77,63 +78,58 @@ export const heuristic = (a, b) => {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 };
 
-export const aStar = (start, goal) => {
-  const q = new FlatQueue();
-  q.push(start, 0);
+const pfm = new PathFinding();
 
-  const cameFrom = {};
+export const aStar = (startLocId, endLocId) => {
+  const start = idToCell(startLocId);
+  const end = idToCell(endLocId);
 
-  const costSoFar = {};
-  costSoFar[start] = 0;
+  const { width, height } = getECS().game.grid.map;
 
-  while (q.peek()) {
-    const current = q.pop();
+  const grid = Array(29)
+    .fill(1)
+    .map(x => Array(74).fill(1));
 
-    if (current === goal) break;
-
-    const neighbors = getNeighborIds(idToCell(current).x, idToCell(current).y);
-
-    neighbors.forEach(nLocId => {
-      let cost = 100000;
-
-      cost = some(
-        getECS().cache.entitiesAtLocation[nLocId],
-        eId => getEntity(eId).components.isBlocking
-      )
-        ? 100
-        : 0;
-
-      if (nLocId === goal) {
-        cost = 0;
-      }
-
-      const newCost = (costSoFar[current] || 0) + cost; // + graph.cost(current, next) cells should have a movement cost that we add here -- https://www.redblobgames.com/pathfinding/a-star/introduction.html#astar
-
-      if (!costSoFar[nLocId] || newCost < costSoFar[nLocId]) {
-        costSoFar[nLocId] = newCost;
-
-        const priority = newCost + heuristic(idToCell(goal), idToCell(nLocId));
-
-        q.push(nLocId, priority);
-
-        cameFrom[nLocId] = current;
-
-        getECS().cache.entitiesAtLocation[nLocId] &&
-          getECS().cache.entitiesAtLocation[nLocId].forEach(id => {
-            const direction = getDirection(current, nLocId);
-            getEntity(id).components.breadthFirst = direction;
-            getEntity(id).components.cameFrom = current;
-          });
-      }
-    });
-  }
-
-  console.log({
-    cameFrom,
-    costSoFar,
-    start,
-    goal
+  each(getECS().cache.entitiesAtLocation, (val, locId) => {
+    if (!some(val, eId => getEntity(eId).components.isBlocking)) {
+      const loc = idToCell(locId);
+      // debugger;
+      grid[loc.y - 3][loc.x - 21] = 0;
+    }
   });
 
-  return cameFrom;
+  // // this should be cached maybe?
+  pfm.setWalkable(0);
+  pfm.setStart({ col: start.x - 21, row: start.y - 3 });
+  pfm.setEnd({ col: end.x - 21, row: end.y - 3 });
+
+  const result = pfm.find(grid);
+  console.log(result);
+  return result;
 };
+
+// export const aStar = (start, goal) => {
+//   const { width, height } = getECS().game.grid.map;
+
+//   // this should be cached maybe?
+//   const grid = Array(width)
+//     .fill(0)
+//     .map(x => Array(height).fill(0));
+
+// each(getECS().cache.entitiesAtLocation, (val, locId) => {
+//   if (!some(val, eId => getEntity(eId).components.isBlocking)) {
+//     const loc = idToCell(locId);
+//     grid[loc.x - 21][loc.y - 3] = 1;
+//   }
+// });
+
+//   const graph = new jsAstar.Graph(grid);
+
+//   const startLoc = idToCell(start);
+//   const endLoc = idToCell(goal);
+
+//   const graphStart = graph.grid[startLoc.x][startLoc.y];
+//   const graphEnd = graph.grid[endLoc.x][endLoc.y];
+
+//   return jsAstar.astar.search(graph, graphStart, graphEnd);
+// };
