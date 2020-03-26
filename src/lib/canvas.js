@@ -1,6 +1,17 @@
 const pixelRatio = window.devicePixelRatio || 1;
-const canvas = document.querySelector("#canvas");
-const ctx = canvas.getContext("2d");
+let canvas;
+let ctx;
+
+// it's a PITA to mock canvas in jest so we just hack it when it's running
+if (process.env.NODE_ENV === "test") {
+  canvas = {
+    style: {}
+  };
+  ctx = {};
+} else {
+  canvas = document.querySelector("#canvas");
+  ctx = canvas.getContext("2d");
+}
 
 export const layers = {
   ground: 100,
@@ -81,25 +92,6 @@ canvas.height = cellHeight * grid.height;
 ctx.font = `normal ${fontSize}px ${font}`;
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-
-// const onResize = () => {
-//   console.log("resizing!");
-//   calculatedFontSize = window.innerWidth / grid.width;
-//   cellWidth = calculatedFontSize * pixelRatio;
-//   cellHeight = calculatedFontSize * lineHeight * pixelRatio;
-//   fontSize = calculatedFontSize * pixelRatio;
-
-//   canvas.style.cssText = `width: ${calculatedFontSize *
-//     grid.width}; height: ${calculatedFontSize * lineHeight * grid.height}`;
-//   canvas.width = cellWidth * grid.width;
-//   canvas.height = cellHeight * grid.height;
-
-//   ctx.font = `normal ${fontSize}px ${font}`;
-
-//   render();
-// };
-
-// window.onresize = throttle(onResize, 500);
 
 const drawBackground = (color, position) => {
   if (color === "transparent") return;

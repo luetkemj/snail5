@@ -2,6 +2,9 @@ import ECS from "../ECS";
 
 const input = key => {
   switch (key) {
+    case "z":
+      ECS.game.userInput = { key, type: "REST", payload: {} };
+      break;
     case "ArrowUp":
       ECS.game.userInput = { key, type: "MOVE", payload: { x: 0, y: -1 } };
       break;

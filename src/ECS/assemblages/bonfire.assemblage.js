@@ -1,6 +1,8 @@
 import Entity from "../Entity";
 import { chars, colors } from "../../lib/graphics";
 import { layers } from "../../lib/canvas";
+import moveToTarget from "../goals/moveToTarget";
+import lightTargetOnFire from "../goals/lightTargetOnFire";
 
 const fireAssemblage = (x, y) => {
   const entity = Entity();
@@ -13,13 +15,21 @@ const fireAssemblage = (x, y) => {
   });
   entity.addComponent("position", { x, y });
   entity.addComponent("isBlocking");
-  entity.addComponent("lightsource", { range: 3.5, color: colors.campfire });
   entity.addComponent("name", {
     name: "Bonfire",
     plural: "bonfires",
     possesive: "bonfire's"
   });
   entity.addComponent("canBeOnLegend");
+
+  entity.addComponent("activities", {
+    BORED: [
+      {
+        procedure: [moveToTarget, lightTargetOnFire],
+        target: entity.id
+      }
+    ]
+  });
 
   return entity;
 };

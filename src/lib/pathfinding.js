@@ -4,9 +4,13 @@ import { getDirection, getNeighborIds, idToCell } from "./grid";
 
 import { PathFinding } from "astarjs";
 
-export const floodFill = startLoc => {
+// need to track the distance from start so we can break early if nothing is found in range
+// maybe we want to be able to just store all locs in range with some component (activities?)
+export const floodFill = (startLoc, breakCondition = () => false) => {
   const frontier = [startLoc];
   const visited = {};
+
+  let complete = false;
 
   while (frontier.length) {
     const current = frontier.pop();
@@ -15,6 +19,12 @@ export const floodFill = startLoc => {
     const neighbors = getNeighborIds(currentCell.x, currentCell.y);
 
     neighbors.forEach(nLocId => {
+      // if entity satisfies breakCondition - set complete to true
+      if (breakCondition(getECS().cache.entitiesAtLocation[nLocId])) {
+        complete = true;
+        return getECS().cache.entitiesAtLocation[nLocId];
+      }
+
       if (
         !visited[nLocId] &&
         !some(
@@ -26,6 +36,8 @@ export const floodFill = startLoc => {
         visited[nLocId] = true;
       }
     });
+
+    if (complete) break;
   }
 
   return visited;

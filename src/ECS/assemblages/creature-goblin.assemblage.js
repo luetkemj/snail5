@@ -1,23 +1,22 @@
 import createCreature from "./creature.assemblage";
 import { chars, colors } from "../../lib/graphics";
 
-const playerAssemblage = (x, y) => {
+const goblinAssemblage = (x, y) => {
   const entity = createCreature();
 
   entity.updateComponent("appearance", {
-    char: chars.player,
-    color: colors.player
+    char: chars.goblin,
+    color: colors.goblin
   });
 
   entity.addComponent("position", { x, y });
-  entity.addComponent("lightsource", { range: 2.5 });
+
   entity.addComponent("name", {
-    name: "You",
-    possesive: "your"
+    name: "Goblin",
+    possesive: "goblin's"
   });
-  entity.removeComponent("brain");
 
   return entity;
 };
 
-export default playerAssemblage;
+export default goblinAssemblage;

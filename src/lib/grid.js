@@ -91,6 +91,32 @@ export const getNeighbors = (x, y) => {
 
 export const getNeighborIds = (x, y) => getNeighbors(x, y).map(cellToId);
 
+export const isNeighbor = (a, b) => {
+  let posA = a;
+  if (typeof posA === "string") {
+    posA = idToCell(a);
+  }
+
+  let posB = b;
+  if (typeof posB === "string") {
+    posB = idToCell(b);
+  }
+
+  const { x: ax, y: ay } = posA;
+  const { x: bx, y: by } = posB;
+
+  if (
+    (ax - bx === 1 && ay - by === 0) ||
+    (ax - bx === 0 && ay - by === -1) ||
+    (ax - bx === -1 && ay - by === 0) ||
+    (ax - bx === 0 && ay - by === 1)
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
 export const randomNeighbor = (startX, startY) => {
   const direction = sample(CARDINAL);
   const x = startX + direction.x;
